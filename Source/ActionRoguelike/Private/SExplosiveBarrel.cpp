@@ -2,6 +2,8 @@
 
 
 #include "SExplosiveBarrel.h"
+
+#include "DrawDebugHelpers.h"
 #include "Engine/CollisionProfile.h"
 #include "PhysicsEngine/RadialForceComponent.h"
 
@@ -18,6 +20,7 @@ ASExplosiveBarrel::ASExplosiveBarrel()
 
 	ForceComp = CreateDefaultSubobject<URadialForceComponent>("ForceComp");
 	ForceComp->SetupAttachment(StaticMeshComp);
+	ForceComp->SetAutoActivate(false);
 	ForceComp->Radius = 750.0f;
 	ForceComp->ImpulseStrength = 2000.0f;
 	ForceComp->bImpulseVelChange = true;
@@ -27,6 +30,12 @@ void ASExplosiveBarrel::OnActorHit(UPrimitiveComponent* HitComponent, AActor* Ot
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	ForceComp->FireImpulse();
+
+	UE_LOG(LogTemp, Log, TEXT("OnActorHit in explosive barrel"));
+	UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s, at game time: %f"), *GetNameSafe(OtherActor), GetWorld()->TimeSeconds);
+
+	FString CombinedString = FString::Printf(TEXT("Hit at location: %s"), *Hit.ImpactPoint.ToString());
+	DrawDebugString(GetWorld(), Hit.ImpactPoint, CombinedString, nullptr, FColor::Green, 2.0f, true);
 }
 
 // Called when the game starts or when spawned

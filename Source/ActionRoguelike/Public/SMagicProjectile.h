@@ -1,40 +1,22 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "SProjectileBaseActor.h"
 #include "SMagicProjectile.generated.h"
 
-class USphereComponent;
-class UProjectileMovementComponent;
-class UParticleSystemComponent;
+class UParticleSystem;
 
+/*
+ * @brief	Magic projectile actor.
+ */
 UCLASS()
-class ACTIONROGUELIKE_API ASMagicProjectile : public AActor
+class ACTIONROGUELIKE_API ASMagicProjectile : public ASProjectileBaseActor
 {
 	GENERATED_BODY()
+
+protected: // Protected methods
 	
-public:	
-	// Sets default values for this actor's properties
-	ASMagicProjectile();
-
-protected:
-
-	UPROPERTY(VisibleAnywhere)
-	USphereComponent* SphereComp;
-
-	UPROPERTY(VisibleAnywhere)
-	UProjectileMovementComponent* MovementComp;
-
-	UPROPERTY(VisibleAnywhere)
-	UParticleSystemComponent* EffectComp;
-
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	
 };

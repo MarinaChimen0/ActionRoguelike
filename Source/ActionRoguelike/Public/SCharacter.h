@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "SCharacter.generated.h"
 
+class USInteractionComponent;
 class UCameraComponent;
 class USpringArmComponent;
 
@@ -15,29 +16,52 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> ProjectileClass;
+	UPROPERTY(EditDefaultsOnly, Category = "Attack")
+	float AttackAnimDelay = 0.2f;
+	UPROPERTY(EditAnywhere, Category="Attack")
+	TSubclassOf<AActor> MagicProjectileClass;
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	TSubclassOf<AActor> BlackHoleProjectileClass;
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	TSubclassOf<AActor> DashProjectileClass;
+	UPROPERTY(EditAnywhere, Category="Attack")
+	UAnimMontage* AttackAnim;
+	
+	FTimerHandle TimerHandle_PrimaryAttack;
+	FTimerHandle TimerHandle_BlackHoleAttack;
+	FTimerHandle TimerHandle_Dash;
 
 public:
 	// Sets default values for this character's properties
 	ASCharacter();
 
 protected:
+	
 	UPROPERTY(VisibleAnywhere);
 	USpringArmComponent* SpringArmComp;
 	UPROPERTY(VisibleAnywhere);
 	UCameraComponent* CameraComp;
-
+	UPROPERTY(VisibleAnywhere);
+	USInteractionComponent* InteractionComp;
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
 	void MoveForward(float Value);
 	void MoveRight(float Value);
+	void PrimaryInteract();
 	void PrimaryAttack();
+	void PrimaryAttack_TimeElapsed();
+	void BlackHoleAttack();
+	void BlackHoleAttack_TimeElapsed();
+	void Dash();
+	void Dash_TimeElapsed();
+	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
