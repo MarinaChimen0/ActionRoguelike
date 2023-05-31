@@ -28,6 +28,6 @@ protected: // Protected methods
 protected: // Protected variables
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Damage")
-	float Damage = 20;
+	float Damage = 50;
 	
 };
