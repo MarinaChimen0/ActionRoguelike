@@ -37,6 +37,6 @@ void ASDashProjectile::TeleportInstigator()
 	}
 	if(ensure(!IsPendingKill()))
 	{
-		//Destroy();
+		Destroy();
 	}
 }

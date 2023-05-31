@@ -18,5 +18,16 @@ protected: // Protected methods
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	/**
+	 * @brief	Called when the destructor sphere is overlapped by another actor.
+	 */
+	UFUNCTION()
+	void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
+protected: // Protected variables
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Damage")
+	float Damage = 20;
 	
 };

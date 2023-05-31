@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "SCharacter.generated.h"
 
+class USAttributeComponent;
 class USInteractionComponent;
 class UCameraComponent;
 class USpringArmComponent;
@@ -16,6 +17,7 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Attack")
 	float AttackAnimDelay = 0.2f;
 	UPROPERTY(EditAnywhere, Category="Attack")
@@ -37,12 +39,14 @@ public:
 
 protected:
 	
-	UPROPERTY(VisibleAnywhere);
+	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
-	UPROPERTY(VisibleAnywhere);
+	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
-	UPROPERTY(VisibleAnywhere);
+	UPROPERTY(VisibleAnywhere)
 	USInteractionComponent* InteractionComp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
+	USAttributeComponent* AttributeComp;
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
