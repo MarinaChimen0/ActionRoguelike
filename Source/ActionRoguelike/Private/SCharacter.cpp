@@ -4,6 +4,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -30,7 +31,7 @@ ASCharacter::ASCharacter()
 void ASCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	//AttributeComp->OnHealthChanged.AddDynamic(this, &ThisClass::ASCharacter::OnHealthChanged);
+	AttributeComp->OnHealthChanged.AddDynamic(this, &ThisClass::ASCharacter::OnHealthChanged);
 }
 
 // Called when the game starts or when spawned
@@ -100,6 +101,7 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 	if (!ensureAlways(ClassToSpawn)) return;
 	
 	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+	UGameplayStatics::SpawnEmitterAttached(CastingEffect, GetMesh(), "Muzzle_01");
 	
 	//Calculate impact rotation - line trace
 	FCollisionObjectQueryParams ObjectQueryParams;
@@ -127,10 +129,14 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth,
 	float Delta)
 {
-	if(NewHealth <= 0.0f && Delta < 0.0f)
+	if(Delta<0.0f)
 	{
-		APlayerController* PC = Cast<APlayerController>(GetController());
-		DisableInput(PC);
+		GetMesh()->SetScalarParameterValueOnMaterials("HitFlashTime", GetWorld()->TimeSeconds);
+		if(NewHealth <= 0.0f)
+		{
+			APlayerController* PC = Cast<APlayerController>(GetController());
+			DisableInput(PC);
+		}
 	}
 }
 
@@ -153,7 +159,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASCharacter::Jump);
-	//PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
+	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
 	PlayerInputComponent->BindAction("SecondaryAttack", IE_Pressed, this, &ASCharacter::BlackHoleAttack);
 	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &ASCharacter::Dash);
 }

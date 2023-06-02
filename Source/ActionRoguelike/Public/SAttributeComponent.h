@@ -20,8 +20,6 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnHealthChanged OnHealthChanged;
 	
-//Public variables
-
 //Public methods
 	
 	// Sets default values for this component's properties
@@ -32,17 +30,26 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool IsAlive() const;
+
+	UFUNCTION(BlueprintCallable)
+	bool IsHealthMax() const;
+
+	UFUNCTION(BlueprintCallable)
+	float GetHealthMax() const;
 	
 protected:
+
+//Protected variables  	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Attributes")
+	float HealthMax = 100;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Attributes")
+	float Health;
 
 //Protected methods
 	
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-//Protected variables  	
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Attributes")
-	float Health = 100;
 	
 };

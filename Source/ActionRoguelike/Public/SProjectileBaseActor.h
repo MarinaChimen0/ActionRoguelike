@@ -7,6 +7,8 @@
 class USphereComponent;
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
+class USoundCue;
+class UAudioComponent;
 
 /*
  * @brief	Projectile base actor.
@@ -16,7 +18,7 @@ class ACTIONROGUELIKE_API ASProjectileBaseActor : public AActor
 {
 	GENERATED_BODY()
 
-public: // Public variables
+protected: // Protected variables
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UParticleSystem* HitParticleSystem = nullptr;
@@ -32,6 +34,23 @@ public: // Public variables
 	// Effect component
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UParticleSystemComponent* EffectComp;
+
+	// Audio component for the flight sound
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Effects|Sound")
+	UAudioComponent* FlightAudioComponent;
+
+	// Sound when the projectile impact
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Effects|Sound")
+	USoundCue* ImpactSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects|Shake")
+	TSubclassOf<UCameraShake> ImpactCameraShake;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects|Shake")
+	float ImpactInnerRadius;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects|Shake")
+	float ImpactOuterRadius;
 	
 public:	// Public methods
 	

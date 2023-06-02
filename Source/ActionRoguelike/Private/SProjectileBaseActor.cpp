@@ -1,9 +1,11 @@
 #include "SProjectileBaseActor.h"
 
+#include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Sound/SoundCue.h"
 
 
 ASProjectileBaseActor::ASProjectileBaseActor()
@@ -17,6 +19,9 @@ ASProjectileBaseActor::ASProjectileBaseActor()
 
 	EffectComp = CreateDefaultSubobject<UParticleSystemComponent>("EffectComp");
 	EffectComp->SetupAttachment(SphereComp);
+
+	FlightAudioComponent = CreateDefaultSubobject<UAudioComponent>("FlightAudioComponent");
+	FlightAudioComponent->SetupAttachment(RootComponent);
 
 	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComp");
 	MovementComp->InitialSpeed = 1000.0f;
@@ -43,6 +48,9 @@ void ASProjectileBaseActor::Explode_Implementation()
 	if(ensure(!IsPendingKill()))
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticleSystem, GetActorLocation(), GetActorRotation());
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ImpactSound, GetActorLocation(), GetActorRotation(),
+			ImpactSound->VolumeMultiplier, ImpactSound->PitchMultiplier, 0, ImpactSound->AttenuationSettings);
+		UGameplayStatics::PlayWorldCameraShake(GetWorld(), ImpactCameraShake, GetActorLocation(), ImpactInnerRadius, ImpactOuterRadius);
 		Destroy();
 	}
 }

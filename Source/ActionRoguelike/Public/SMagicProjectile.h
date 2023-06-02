@@ -4,6 +4,7 @@
 #include "SProjectileBaseActor.h"
 #include "SMagicProjectile.generated.h"
 
+class USoundCue;
 class UParticleSystem;
 
 /*
@@ -14,7 +15,14 @@ class ACTIONROGUELIKE_API ASMagicProjectile : public ASProjectileBaseActor
 {
 	GENERATED_BODY()
 
-protected: // Protected methods
+protected:
+
+// Protected variables
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Damage")
+	float Damage = 50;
+	
+// Protected methods
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -24,10 +32,5 @@ protected: // Protected methods
 	 */
 	UFUNCTION()
 	void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
-
-protected: // Protected variables
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Damage")
-	float Damage = 50;
 	
 };
