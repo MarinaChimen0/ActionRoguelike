@@ -4,9 +4,7 @@
 #include "BehaviorTree/BTService.h"
 #include "SBTService_CheckAttackRange.generated.h"
 
-/**
- * @brief	BT Service that checks if the target actor is within range.
- */
+
 UCLASS()
 class ACTIONROGUELIKE_API USBTService_CheckAttackRange : public UBTService
 {
