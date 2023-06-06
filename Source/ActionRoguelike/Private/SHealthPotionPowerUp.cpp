@@ -17,7 +17,7 @@ void ASHealthPotionPowerUp::ApplyPowerUp(APawn* InstigatorPawn)
 	USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(InstigatorPawn->GetComponentByClass(USAttributeComponent::StaticClass()));
 
 	if(ensure(AttributeComp) && !AttributeComp->IsHealthMax())
-		AttributeComp->ApplyHealthChange(AttributeComp->GetHealthMax());
+		AttributeComp->ApplyHealthChange(this, AttributeComp->GetHealthMax());
 }
 
 

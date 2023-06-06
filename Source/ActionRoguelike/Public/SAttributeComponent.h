@@ -21,12 +21,18 @@ public:
 	FOnHealthChanged OnHealthChanged;
 	
 //Public methods
+
+	UFUNCTION(BlueprintCallable, Category="Attributes")
+	static USAttributeComponent* GetAttributes(AActor* FromActor);
+
+	UFUNCTION(BlueprintCallable, Category="Attributes", meta = (DisplayName = "IsAlive"))
+	static bool IsActorAlive(AActor* Actor);
 	
 	// Sets default values for this component's properties
 	USAttributeComponent();
 
 	UFUNCTION(BlueprintCallable, Category="Attributes")
-	bool ApplyHealthChange(float Delta);
+	bool ApplyHealthChange(AActor* InstigatorActor, float Delta);
 
 	UFUNCTION(BlueprintCallable)
 	bool IsAlive() const;

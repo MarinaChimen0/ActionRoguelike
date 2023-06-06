@@ -5,6 +5,22 @@ USAttributeComponent::USAttributeComponent()
 {
 }
 
+USAttributeComponent* USAttributeComponent::GetAttributes(AActor* FromActor)
+{
+	if(FromActor)
+	{
+		return Cast<USAttributeComponent>(FromActor->GetComponentByClass(USAttributeComponent::StaticClass()));
+	}
+	return nullptr;
+}
+
+bool USAttributeComponent::IsActorAlive(AActor* Actor)
+{
+	if(USAttributeComponent* AttributeComponent = GetAttributes(Actor))
+		return AttributeComponent->IsAlive();
+
+	return false;
+}
 
 // Called when the game starts
 void USAttributeComponent::BeginPlay()
@@ -14,11 +30,13 @@ void USAttributeComponent::BeginPlay()
 	Health = HealthMax;
 }
 
-bool USAttributeComponent::ApplyHealthChange(float Delta)
+bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delta)
 {
+	float OldHealth = Health;
 	Health = FMath::Clamp(Health+Delta, 0.0f, HealthMax);
-	OnHealthChanged.Broadcast(nullptr, this, Health, Delta);
-	return true;
+	float ActualDelta = Health - OldHealth;
+	OnHealthChanged.Broadcast(InstigatorActor, this, Health, ActualDelta);
+	return ActualDelta != 0;
 }
 
 bool USAttributeComponent::IsAlive() const
