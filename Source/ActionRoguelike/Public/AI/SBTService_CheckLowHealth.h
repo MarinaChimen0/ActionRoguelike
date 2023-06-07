@@ -2,13 +2,13 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTService.h"
-#include "SBTService_CheckAttackRange.generated.h"
+#include "SBTService_CheckLowHealth.generated.h"
 
 /**
- * @brief	BT Service to check attack range.
+ * @brief	BT Service to check low health.
  */
 UCLASS()
-class ACTIONROGUELIKE_API USBTService_CheckAttackRange : public UBTService
+class ACTIONROGUELIKE_API USBTService_CheckLowHealth : public UBTService
 {
 	GENERATED_BODY()
 
@@ -17,8 +17,11 @@ protected:
 	// Protected variables
 	
 	UPROPERTY(EditAnywhere, Category="AI")
-	FBlackboardKeySelector AttackRangeKey;
+	FBlackboardKeySelector LowHealthKey;
 
+	UPROPERTY(EditAnywhere, Category = "AI", meta = (ClampMin="0.0", ClampMax="1.0"))
+	float LowHealthPercent;
+	
 	// Protected methods
 	
 	/** update next tick interval
