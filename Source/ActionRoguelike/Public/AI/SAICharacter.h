@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "SAICharacter.generated.h"
 
+class USWorldUserWidget;
 class UPawnSensingComponent;
 class USAttributeComponent;
 
@@ -22,11 +23,17 @@ public:
 
 protected:
 
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	TSubclassOf<UUserWidget> HealthBarWidgetClass;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	USAttributeComponent* AttributeComp;
 	
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UPawnSensingComponent* PawnSensingComp;
+
+	UPROPERTY()
+	USWorldUserWidget* ActiveHealthBar = nullptr;
 
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);

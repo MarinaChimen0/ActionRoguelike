@@ -19,6 +19,7 @@ void ASMagicProjectile::OverlapBegin(UPrimitiveComponent* OverlappedComponent, A
 	if(USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())))
 	{
 		AttributeComp->ApplyHealthChange(GetInstigator(), -Damage);
-		Destroy();
+		UGameplayStatics::PlayWorldCameraShake(GetWorld(), ImpactCameraShake, GetActorLocation(), ImpactInnerRadius, ImpactOuterRadius);
+		Explode();
 	}
 } 
