@@ -1,14 +1,13 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "SInteractionComponent.h"
-
 #include "DrawDebugHelpers.h"
-#include "InputBehavior.h"
 #include "SGameplayInterface.h"
+
+static TAutoConsoleVariable<bool> CVarDebugDrawInteraction(TEXT("su.InteractionDebugDraw"), false, TEXT("Enable Debug Lines for Interact Component."), ECVF_Cheat);
 
 void USInteractionComponent::PrimaryInteract()
 {
+	bool bDebugDraw = CVarDebugDrawInteraction.GetValueOnGameThread();
+	
 	FCollisionObjectQueryParams ObjectQueryParams;
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
 
@@ -31,6 +30,9 @@ void USInteractionComponent::PrimaryInteract()
 	FColor Color = bBlockingHit ? FColor::Green : FColor::Red;
 	for(FHitResult Hit :Hits)
 	{
+		if(bDebugDraw)
+			DrawDebugSphere(GetWorld(), Hit.ImpactPoint, Radius, 32, Color, false, 2.0f);
+		
 		AActor* HitActor = Hit.GetActor();
 		if(HitActor && HitActor->Implements<USGameplayInterface>())
 		{
@@ -38,10 +40,9 @@ void USInteractionComponent::PrimaryInteract()
 			ISGameplayInterface::Execute_Interact(HitActor, MyPawn);
 			break;
 		}
-		DrawDebugSphere(GetWorld(), Hit.ImpactPoint, Radius, 32, Color, false, 2.0f);
 	}
-	
-	DrawDebugLine(GetWorld(), EyeLocation, End, Color, false, 2.0f, 0, 2.0f);
+	if(bDebugDraw)
+		DrawDebugLine(GetWorld(), EyeLocation, End, Color, false, 2.0f, 0, 2.0f);
 }
 
 // Sets default values for this component's properties
