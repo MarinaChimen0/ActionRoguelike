@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "SCharacter.generated.h"
 
+class USActionComponent;
 class USAttributeComponent;
 class USInteractionComponent;
 class UCameraComponent;
@@ -17,29 +18,6 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 
 protected:
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Attack")
-	float AttackAnimDelay = 0.2f;
-	UPROPERTY(EditAnywhere, Category="Attack")
-	TSubclassOf<AActor> MagicProjectileClass;
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> BlackHoleProjectileClass;
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> DashProjectileClass;
-	UPROPERTY(EditAnywhere, Category="Attack")
-	UAnimMontage* AttackAnim;
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	UParticleSystem* CastingEffect;
-	
-	FTimerHandle TimerHandle_PrimaryAttack;
-	FTimerHandle TimerHandle_BlackHoleAttack;
-	FTimerHandle TimerHandle_Dash;
-
-public:
-	// Sets default values for this character's properties
-	ASCharacter();
-
-protected:
-	
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 	UPROPERTY(VisibleAnywhere)
@@ -48,6 +26,8 @@ protected:
 	USInteractionComponent* InteractionComp;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	USAttributeComponent* AttributeComp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
+	USActionComponent* ActionComp;
 
 	virtual void PostInitializeComponents() override;
 	
@@ -56,24 +36,24 @@ protected:
 	
 	void MoveForward(float Value);
 	void MoveRight(float Value);
+	void SprintStart();
+	void SprintStop();
 	void PrimaryInteract();
 	void PrimaryAttack();
-	void PrimaryAttack_TimeElapsed();
 	void BlackHoleAttack();
-	void BlackHoleAttack_TimeElapsed();
 	void Dash();
-	void Dash_TimeElapsed();
-	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
+
 	
 	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);
 
 	virtual FVector GetPawnViewLocation() const override;
 	
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+public:
 	
+	// Sets default values for this character's properties
+	ASCharacter();
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
