@@ -34,12 +34,15 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USphereComponent* SphereComponent;
 	
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UStaticMeshComponent* MeshComponent;
+	
 // Protected methods
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	virtual void ApplyPowerUp(APawn* InstigatorPawn);
+	virtual bool ApplyPowerUp(APawn* InstigatorPawn);
 
 private:
 

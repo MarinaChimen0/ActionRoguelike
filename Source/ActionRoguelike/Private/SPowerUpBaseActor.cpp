@@ -1,8 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "SPowerUpBaseActor.h"
-
 #include "Components/SphereComponent.h"
 
 // Sets default values
@@ -12,12 +8,15 @@ ASPowerUpBaseActor::ASPowerUpBaseActor()
 	SphereComponent->SetCollisionProfileName("Powerup");
 	RootComponent = SphereComponent;
 
+	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
+	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	MeshComponent->SetupAttachment(RootComponent);
 }
 
 void ASPowerUpBaseActor::Interact_Implementation(APawn* InstigatorPawn)
 {
-	ApplyPowerUp(InstigatorPawn);
-	Deactivate();
+	if(ApplyPowerUp(InstigatorPawn))
+		Deactivate();
 }
 
 // Called when the game starts or when spawned
@@ -27,8 +26,9 @@ void ASPowerUpBaseActor::BeginPlay()
 	
 }
 
-void ASPowerUpBaseActor::ApplyPowerUp(APawn* InstigatorPawn)
+bool ASPowerUpBaseActor::ApplyPowerUp(APawn* InstigatorPawn)
 {
+	return false;
 }
 
 void ASPowerUpBaseActor::SetPowerupState(bool bNewIsActive)

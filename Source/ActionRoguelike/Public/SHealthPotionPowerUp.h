@@ -21,15 +21,10 @@ public:
 protected:
 
 	// Protected variables
-	
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UStaticMeshComponent* MeshComponent;
-	
-	//UPROPERTY(EditAnywhere, Category = "Health")
-	//float HealthAmount;
-	
-	// Protected methods
 
-	virtual void ApplyPowerUp(APawn* InstigatorPawn) override;
+	UPROPERTY(EditAnywhere, Category = "Credits")
+	int32 CreditCost = 2;
+	
+	virtual bool ApplyPowerUp(APawn* InstigatorPawn) override;
 	
 };
