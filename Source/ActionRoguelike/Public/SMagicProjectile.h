@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "SProjectileBaseActor.h"
 #include "SMagicProjectile.generated.h"
 
@@ -21,6 +22,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Damage")
 	float Damage = 50;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Damage")
+	FGameplayTag ParryTag;
 	
 // Protected methods
 	

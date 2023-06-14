@@ -7,6 +7,7 @@
 class USWorldUserWidget;
 class UPawnSensingComponent;
 class USAttributeComponent;
+class USActionComponent;
 
 /**
  * @brief	AI character.
@@ -28,6 +29,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	USAttributeComponent* AttributeComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
+	USActionComponent* ActionComp;
 	
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UPawnSensingComponent* PawnSensingComp;

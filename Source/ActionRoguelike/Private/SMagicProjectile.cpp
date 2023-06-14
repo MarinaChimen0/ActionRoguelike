@@ -1,8 +1,9 @@
 #include "SMagicProjectile.h"
 #include "Components/SphereComponent.h"
 #include "DrawDebugHelpers.h"
-#include "SAttributeComponent.h"
+#include "SActionComponent.h"
 #include "SGameplayFunctionLibrary.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 void ASMagicProjectile::BeginPlay()
@@ -23,6 +24,15 @@ void ASMagicProjectile::OverlapBegin(UPrimitiveComponent* OverlappedComponent, A
 		UGameplayStatics::PlayWorldCameraShake(GetWorld(), ImpactCameraShake, GetActorLocation(), ImpactInnerRadius, ImpactOuterRadius);
 		Explode();
 	}*/
+
+	USActionComponent* ActionComp = Cast<USActionComponent>(OtherActor->GetComponentByClass(USActionComponent::StaticClass()));
+	if(ActionComp && ActionComp->ActiveGameplayTags.HasTag(ParryTag))
+	{
+		MovementComp->Velocity = -MovementComp->Velocity;
+		SetInstigator(Cast<APawn>(OtherActor));
+		return;
+	}
+	
 	if(USGameplayFunctionLibrary::ApplyDirectionalDamage(GetInstigator(), OtherActor, Damage, SweepResult))
 		Explode();
 } 
