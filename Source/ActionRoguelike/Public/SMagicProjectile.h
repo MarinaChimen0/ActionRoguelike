@@ -5,6 +5,7 @@
 #include "SProjectileBaseActor.h"
 #include "SMagicProjectile.generated.h"
 
+class USActionEffect;
 class USoundCue;
 class UParticleSystem;
 
@@ -20,11 +21,14 @@ protected:
 
 // Protected variables
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Damage")
+	UPROPERTY(EditDefaultsOnly, Category="Damage")
 	float Damage = 50;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Damage")
+	UPROPERTY(EditDefaultsOnly, Category="Damage")
 	FGameplayTag ParryTag;
+
+	UPROPERTY(EditDefaultsOnly, Category="Damage")
+	TSubclassOf<USActionEffect> BurningActionClass;
 	
 // Protected methods
 	
