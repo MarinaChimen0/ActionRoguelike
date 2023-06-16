@@ -25,7 +25,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category="Actions")
-	void AddAction(AActor* Instigator, TSubclassOf<USAction> ActionClass);
+	bool AddAction(AActor* Instigator, TSubclassOf<USAction> ActionClass);
 	
 	UFUNCTION(BlueprintCallable, Category="Actions")
 	void RemoveAction(USAction* Action);

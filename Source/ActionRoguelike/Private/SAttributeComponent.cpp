@@ -1,12 +1,8 @@
 #include "SAttributeComponent.h"
+
 #include "SGameModeBase.h"
 
 static TAutoConsoleVariable<float> CVarDamageMultiplier(TEXT("su.DamageMultiplier"), 1.0f, TEXT("Global Damage Modifier for Attribute Component."), ECVF_Cheat);
-
-// Sets default values for this component's properties
-USAttributeComponent::USAttributeComponent()
-{
-}
 
 USAttributeComponent* USAttributeComponent::GetAttributes(AActor* FromActor)
 {
@@ -82,4 +78,23 @@ float USAttributeComponent::GetHealth() const
 bool USAttributeComponent::Kill(AActor* InstigatorActor)
 {
 	return ApplyHealthChange(InstigatorActor, -GetHealthMax());
+}
+
+bool USAttributeComponent::ApplyRageChange(AActor* InstigatorActor, float Delta)
+{
+	if(Delta < 0 && FMath::Abs(Delta)>Rage)
+		return false;
+	
+	float OldRage = Rage;
+	Rage = FMath::Clamp(Rage+Delta, 0.0f, RageMax);
+	float ActualDelta = Rage - OldRage;
+
+	OnRageChanged.Broadcast(InstigatorActor, this, Rage, ActualDelta);
+	
+	return true;
+}
+
+float USAttributeComponent::GetRage() const
+{
+	return Rage;
 }

@@ -28,20 +28,32 @@ void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::White, DebugMsg);
 }
 
-void USActionComponent::AddAction(AActor* Instigator, TSubclassOf<USAction> ActionClass)
+bool USActionComponent::AddAction(AActor* Instigator, TSubclassOf<USAction> ActionClass)
 {
 	if(!ensure(ActionClass))
-		return;
+		return false;
 
-	USAction* NewAction = NewObject<USAction>(this, ActionClass);
-	if(ensure(NewAction))
+	
+	for (const USAction* Action : Actions)
 	{
-		Actions.Add(NewAction);
-		if(NewAction->bAutoStart && ensure(NewAction->CanStart(Instigator)))
+		if(Action->IsA(ActionClass))
 		{
-			NewAction->StartAction(Instigator);
+			FString DebugMsg = FString::Printf(TEXT("Action '%s' already known."), *GetNameSafe(ActionClass));			
+			GEngine->AddOnScreenDebugMessage(-1, 2.0, FColor::Red, DebugMsg);
+			return false;
 		}
 	}
+	
+	USAction* NewAction = NewObject<USAction>(this, ActionClass);
+	if(!ensure(NewAction))
+		return false;
+    			
+	Actions.Add(NewAction);
+	if(NewAction->bAutoStart && ensure(NewAction->CanStart(Instigator)))
+	{
+		NewAction->StartAction(Instigator);
+	}	
+	return true;
 }
 
 void USActionComponent::RemoveAction(USAction* Action)

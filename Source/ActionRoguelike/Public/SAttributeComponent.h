@@ -5,7 +5,7 @@
 #include "SAttributeComponent.generated.h"
 
 /**
- * @brief	AAttribute component class.
+ * @brief	Attribute component class.
  */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ACTIONROGUELIKE_API USAttributeComponent : public UActorComponent
@@ -16,9 +16,11 @@ public:
 
 	//Public delegates
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnHealthChanged, AActor*, InstigatorActor, USAttributeComponent*, OwningComp, float, NewHealth, float, Delta);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnAttributeChanged, AActor*, InstigatorActor, USAttributeComponent*, OwningComp, float, NewValue, float, Delta);
 	UPROPERTY(BlueprintAssignable)
-	FOnHealthChanged OnHealthChanged;
+	FOnAttributeChanged OnHealthChanged;
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChanged OnRageChanged;
 	
 //Public methods
 
@@ -27,9 +29,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Attributes", meta = (DisplayName = "IsAlive"))
 	static bool IsActorAlive(AActor* Actor);
-	
-	// Sets default values for this component's properties
-	USAttributeComponent();
 
 	UFUNCTION(BlueprintCallable, Category="Attributes")
 	bool ApplyHealthChange(AActor* InstigatorActor, float Delta);
@@ -48,6 +47,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool Kill(AActor* InstigatorActor);
+
+	UFUNCTION(BlueprintCallable, Category="Attributes")
+	bool ApplyRageChange(AActor* InstigatorActor, float Delta);
+
+	UFUNCTION(BlueprintCallable)
+	float GetRage() const;
 	
 protected:
 
@@ -58,6 +63,12 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Attributes")
 	float Health;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Attributes")
+	float RageMax = 100;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Attributes")
+	float Rage = 0;
 
 //Protected methods
 	

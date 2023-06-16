@@ -28,6 +28,8 @@ protected:
 	USAttributeComponent* AttributeComp;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	USActionComponent* ActionComp;
+	UPROPERTY(EditAnywhere)
+	float BlackholeRageNeeded = 60;
 
 	virtual void PostInitializeComponents() override;
 	

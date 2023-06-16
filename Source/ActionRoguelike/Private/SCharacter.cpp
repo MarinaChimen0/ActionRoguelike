@@ -82,7 +82,8 @@ void ASCharacter::PrimaryAttack()
 
 void ASCharacter::BlackHoleAttack()
 {
-	ActionComp->StartAction(this, "Blackhole");
+	if(AttributeComp->ApplyRageChange(this, -BlackholeRageNeeded))
+		ActionComp->StartAction(this, "Blackhole");
 }
 
 void ASCharacter::Dash()
@@ -96,6 +97,9 @@ void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent*
 	if(Delta<0.0f)
 	{
 		GetMesh()->SetScalarParameterValueOnMaterials("HitFlashTime", GetWorld()->TimeSeconds);
+
+		AttributeComp->ApplyRageChange(InstigatorActor, FMath::Abs(Delta));
+		
 		if(NewHealth <= 0.0f)
 		{
 			APlayerController* PC = Cast<APlayerController>(GetController());

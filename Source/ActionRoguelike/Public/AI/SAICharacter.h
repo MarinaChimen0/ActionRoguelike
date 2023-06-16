@@ -25,6 +25,9 @@ public:
 protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="UI")
+	TSubclassOf<UUserWidget> PlayerSpottedWidgetClass;
+	
+	UPROPERTY(EditDefaultsOnly, Category="UI")
 	TSubclassOf<UUserWidget> HealthBarWidgetClass;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
@@ -48,5 +51,7 @@ protected:
 	virtual void PostInitializeComponents() override;
 
 	void SetTargetActor(AActor* NewTarget);
+
+	AActor* GetTargetActor();
 	
 };
