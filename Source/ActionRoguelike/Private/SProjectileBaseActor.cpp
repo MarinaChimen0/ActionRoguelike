@@ -28,6 +28,8 @@ ASProjectileBaseActor::ASProjectileBaseActor()
 	MovementComp->ProjectileGravityScale = 0.0f;
 	MovementComp->bRotationFollowsVelocity = true;
 	MovementComp->bInitialVelocityInLocalSpace = true;
+
+	SetReplicates(true);
 }
 
 void ASProjectileBaseActor::PostInitializeComponents()

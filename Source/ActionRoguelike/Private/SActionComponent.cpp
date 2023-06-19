@@ -18,8 +18,6 @@ void USActionComponent::BeginPlay()
 	}
 }
 
-
-
 void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -76,12 +74,20 @@ bool USActionComponent::StartAction(AActor* Instigator, FName ActionName)
 				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FailedMsg);
 				continue;
 			}
+			
+			if(!GetOwner()->HasAuthority())
+				ServerStartAction(Instigator, ActionName);
 					
 			Action->StartAction(Instigator);
 			return true;
 		}
 	}
 	return false;
+}
+
+void USActionComponent::ServerStartAction_Implementation(AActor* Instigator, FName ActionName)
+{
+	StartAction(Instigator, ActionName);
 }
 
 bool USActionComponent::StopAction(AActor* Instigator, FName ActionName)

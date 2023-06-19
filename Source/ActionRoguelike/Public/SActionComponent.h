@@ -37,7 +37,7 @@ public:
 	bool StopAction(AActor* Instigator, FName ActionName);
 
 protected:
-
+	
 	UPROPERTY(EditAnywhere, Category="Actions")
 	TArray<TSubclassOf<USAction>> DefaultActions;
 	
@@ -45,5 +45,8 @@ protected:
 	TArray<USAction*> Actions;
 
 	virtual void BeginPlay() override;
+
+	UFUNCTION(Server, Reliable)
+	void ServerStartAction(AActor* Instigator, FName ActionName);
 	
 };
