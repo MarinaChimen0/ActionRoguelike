@@ -23,8 +23,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Tags")
 	FGameplayTagContainer BlockedTags;
 
+	UPROPERTY(ReplicatedUsing="OnRep_IsRunning")
 	bool bIsRunning;
 
+	UPROPERTY(Replicated)
+	USActionComponent* ActionComp;
+
+	UFUNCTION()
+	void OnRep_IsRunning();
+	
 	UFUNCTION(BlueprintCallable, Category="Action")
 	USActionComponent* GetOwningComponent() const;
 	
@@ -35,6 +42,8 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, Category="Action")
 	FName ActionName;
+	
+	void Initialize(USActionComponent* NewActionComp);
 
 	UFUNCTION(BlueprintCallable, Category="Action")
 	bool IsRunning() const;
@@ -49,4 +58,8 @@ public:
 	void StopAction(AActor* Instigator);
 
 	virtual UWorld* GetWorld() const override;
+	
+	/** IsSupportedForNetworking means an object can be referenced over the network */
+	virtual bool IsSupportedForNetworking() const override;
+	
 };

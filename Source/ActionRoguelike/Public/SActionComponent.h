@@ -36,12 +36,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Actions")
 	bool StopAction(AActor* Instigator, FName ActionName);
 
+	/** Allows a component to replicate other subobject on the actor  */
+	virtual bool ReplicateSubobjects(class UActorChannel *Channel, class FOutBunch *Bunch, FReplicationFlags *RepFlags) override;
+
 protected:
 	
 	UPROPERTY(EditAnywhere, Category="Actions")
 	TArray<TSubclassOf<USAction>> DefaultActions;
 	
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	TArray<USAction*> Actions;
 
 	virtual void BeginPlay() override;
