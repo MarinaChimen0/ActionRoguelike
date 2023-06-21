@@ -30,7 +30,10 @@ public:
 private:
 
 	// Private variables
-
+	UPROPERTY(Replicated)
 	int32 CreditsAmount = 0;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastCreditsChanged(int32 NewCreditsAmount, int32 Amount);
 	
 };

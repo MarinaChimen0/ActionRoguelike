@@ -1,5 +1,6 @@
 #include "SPowerUpBaseActor.h"
 #include "Components/SphereComponent.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ASPowerUpBaseActor::ASPowerUpBaseActor()
@@ -13,6 +14,13 @@ ASPowerUpBaseActor::ASPowerUpBaseActor()
 	MeshComponent->SetupAttachment(RootComponent);
 
 	SetReplicates(true);
+}
+
+void ASPowerUpBaseActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ASPowerUpBaseActor, bIsActive);
 }
 
 void ASPowerUpBaseActor::Interact_Implementation(APawn* InstigatorPawn)
@@ -33,6 +41,11 @@ bool ASPowerUpBaseActor::ApplyPowerUp(APawn* InstigatorPawn)
 	return false;
 }
 
+void ASPowerUpBaseActor::OnRep_IsActive()
+{
+	SetPowerupState(bIsActive);
+}
+
 void ASPowerUpBaseActor::SetPowerupState(bool bNewIsActive)
 {
 	SetActorEnableCollision(bNewIsActive);
@@ -41,12 +54,14 @@ void ASPowerUpBaseActor::SetPowerupState(bool bNewIsActive)
 
 void ASPowerUpBaseActor::Activate()
 {
-	SetPowerupState(true);
+	bIsActive = true;
+	SetPowerupState(bIsActive);
 }
 
 void ASPowerUpBaseActor::Deactivate()
 {
-	SetPowerupState(false);
+	bIsActive = false;
+	SetPowerupState(bIsActive);
 	FTimerHandle ActivateTimer;
 	GetWorldTimerManager().SetTimer(ActivateTimer, this, &ASPowerUpBaseActor::Activate, InactiveTime);
 }

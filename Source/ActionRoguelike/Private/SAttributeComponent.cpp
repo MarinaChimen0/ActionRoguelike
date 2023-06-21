@@ -17,6 +17,8 @@ void USAttributeComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 
 	DOREPLIFETIME(USAttributeComponent, Health);
 	DOREPLIFETIME(USAttributeComponent, HealthMax);
+	DOREPLIFETIME(USAttributeComponent, Rage);
+	DOREPLIFETIME(USAttributeComponent, RageMax);
 
 	//DOREPLIFETIME_CONDITION(USAttributeComponent, HealthMax, COND_InitialOnly);
 }
@@ -44,6 +46,11 @@ void USAttributeComponent::BeginPlay()
 	Super::BeginPlay();
 
 	Health = HealthMax;
+}
+
+void USAttributeComponent::MulticastRageChanged_Implementation(AActor* InstigatorActor, float NewRage, float Delta)
+{
+	OnRageChanged.Broadcast(InstigatorActor, this, NewRage, Delta);
 }
 
 void USAttributeComponent::MulticastHealthChanged_Implementation(AActor* InstigatorActor, float NewHealth, float Delta)
@@ -114,6 +121,8 @@ bool USAttributeComponent::ApplyRageChange(AActor* InstigatorActor, float Delta)
 	float ActualDelta = Rage - OldRage;
 
 	OnRageChanged.Broadcast(InstigatorActor, this, Rage, ActualDelta);
+	if(ActualDelta!=0)
+		MulticastRageChanged(InstigatorActor, Rage, ActualDelta);
 	
 	return true;
 }

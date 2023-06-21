@@ -53,5 +53,8 @@ protected:
 	void SetTargetActor(AActor* NewTarget);
 
 	AActor* GetTargetActor();
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void ShowSpottedWidget();
 	
 };

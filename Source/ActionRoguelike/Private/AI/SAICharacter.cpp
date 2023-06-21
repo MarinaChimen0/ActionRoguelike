@@ -21,6 +21,8 @@ ASAICharacter::ASAICharacter()
 	ActionComp = CreateDefaultSubobject<USActionComponent>("ActionComp");
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Ignore);
 	GetMesh()->SetGenerateOverlapEvents(true);
+	SetReplicates(true);
+
 }
 
 void ASAICharacter::PostInitializeComponents()
@@ -44,18 +46,29 @@ AActor* ASAICharacter::GetTargetActor()
 	return nullptr;
 }
 
-void ASAICharacter::OnPawnSeen(APawn* Pawn)
+void ASAICharacter::ShowSpottedWidget_Implementation()
 {
-	if(Pawn == GetTargetActor())
-		return;
-	
-	SetTargetActor(Pawn);
 	USWorldUserWidget* PlayerSpottedWidget = CreateWidget<USWorldUserWidget>(GetWorld(), PlayerSpottedWidgetClass);
 	if(PlayerSpottedWidget)
 	{
 		PlayerSpottedWidget->AttachedActor = this;
 		PlayerSpottedWidget->AddToViewport(2);
 	}
+}
+
+void ASAICharacter::OnPawnSeen(APawn* Pawn)
+{
+	if(Pawn == GetTargetActor())
+		return;
+	
+	SetTargetActor(Pawn);
+	ShowSpottedWidget();
+	/*USWorldUserWidget* PlayerSpottedWidget = CreateWidget<USWorldUserWidget>(GetWorld(), PlayerSpottedWidgetClass);
+	if(PlayerSpottedWidget)
+	{
+		PlayerSpottedWidget->AttachedActor = this;
+		PlayerSpottedWidget->AddToViewport(2);
+	}*/
 	//DrawDebugString(GetWorld(), GetActorLocation(), "PLAYER SPOTTED", nullptr, FColor::White, 4.0f, true);
 }
 

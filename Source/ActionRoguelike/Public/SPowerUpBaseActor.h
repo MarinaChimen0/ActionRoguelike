@@ -28,6 +28,9 @@ protected:
 
 // Protected variables
 
+	UPROPERTY(ReplicatedUsing="OnRep_IsActive")
+	bool bIsActive = true;
+	
 	UPROPERTY(EditAnywhere, Category = "Powerup")
 	float InactiveTime = 10;
 	
@@ -44,6 +47,9 @@ protected:
 
 	virtual bool ApplyPowerUp(APawn* InstigatorPawn);
 
+	UFUNCTION()
+	void OnRep_IsActive();
+	
 private:
 
 // Private methods
