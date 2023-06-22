@@ -50,10 +50,9 @@ void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	{
 		FColor TextColor = Action->IsRunning() ? FColor::Blue : FColor::White;
 
-		FString ActionMsg = FString::Printf(TEXT("[%s] Action %s : IsRunning: %s : Outer: %s"),
-			*GetNameSafe(GetOwner()), *Action->ActionName.ToString(),
-			Action->IsRunning() ? TEXT("true") : TEXT("false"),
-			*GetNameSafe(Action->GetOuter()));
+		FString ActionMsg = FString::Printf(TEXT("[%s] Action %s : IsRunning: %s"),
+			*GetNameSafe(GetOwner()), *GetNameSafe(Action),
+			Action->IsRunning() ? TEXT("true") : TEXT("false"));
 
 		LogOnScreen(this, ActionMsg, TextColor, 0.f);
 	}
@@ -74,6 +73,12 @@ bool USActionComponent::AddAction(AActor* Instigator, TSubclassOf<USAction> Acti
 			return false;
 		}
 	}*/
+
+	if(!GetOwner()->HasAuthority())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Client attempting to AddAction. [Class: %s]"), *GetNameSafe(ActionClass));
+		return false;
+	}
 	
 	USAction* NewAction = NewObject<USAction>(GetOwner(), ActionClass);
 	if(!ensure(NewAction))
@@ -132,10 +137,21 @@ bool USActionComponent::StopAction(AActor* Instigator, FName ActionName)
 		{
 			if(Action->IsRunning())
 			{
+				if(!GetOwner()->HasAuthority())
+				{
+					ServerStopAction(Instigator, ActionName);
+				}
+				
 				Action->StopAction(Instigator);
 				return true;
 			}
 		}
 	}
 	return false;
+}
+
+
+void USActionComponent::ServerStopAction_Implementation(AActor* Instigator, FName ActionName)
+{
+	StopAction(Instigator, ActionName);
 }

@@ -62,7 +62,7 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
 {
 	if(!GetOwner()->CanBeDamaged() && Delta<0.0f)
 		return false;
-
+	
 	if(Delta<0.0f)
 	{
 		float DamageMultiplier = CVarDamageMultiplier.GetValueOnGameThread();
@@ -70,19 +70,21 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
 	}
 	
 	float OldHealth = Health;
-	Health = FMath::Clamp(Health+Delta, 0.0f, HealthMax);
-	float ActualDelta = Health - OldHealth;
-
-	//OnHealthChanged.Broadcast(InstigatorActor, this, Health, ActualDelta);
-	if(ActualDelta!=0)
-		MulticastHealthChanged(InstigatorActor, Health, ActualDelta);
+	float NewHealth = Health = FMath::Clamp(Health+Delta, 0.0f, HealthMax);
+	float ActualDelta = NewHealth - OldHealth;
 	
-	if(ActualDelta<0.0f && Health==0.0f)
+	if(GetOwner()->HasAuthority())
 	{
-		if(ASGameModeBase* GM = GetWorld()->GetAuthGameMode<ASGameModeBase>())
-			GM->OnActorKilled(GetOwner(), InstigatorActor);
+		Health = NewHealth;
+		if(ActualDelta!=0)
+			MulticastHealthChanged(InstigatorActor, Health, ActualDelta);
+		if(ActualDelta<0.0f && Health==0.0f)
+		{
+			if(ASGameModeBase* GM = GetWorld()->GetAuthGameMode<ASGameModeBase>())
+				GM->OnActorKilled(GetOwner(), InstigatorActor);
+		}
 	}
-		
+	
 	return ActualDelta != 0;
 }
 

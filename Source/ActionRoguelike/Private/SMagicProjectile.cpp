@@ -37,7 +37,7 @@ void ASMagicProjectile::OverlapBegin(UPrimitiveComponent* OverlappedComponent, A
 	if(USGameplayFunctionLibrary::ApplyDirectionalDamage(GetInstigator(), OtherActor, Damage, SweepResult))
 	{
 		Explode();
-		if(ActionComp)
+		if(ActionComp && HasAuthority())
 			ActionComp->AddAction(GetInstigator(), BurningActionClass);
 	}
 } 
