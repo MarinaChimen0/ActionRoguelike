@@ -9,6 +9,7 @@ class UEnvQuery;
 class UEnvQueryInstanceBlueprintWrapper;
 class UCurveFloat;
 class ASPowerUpBaseActor;
+class USSaveGame;
 
 /**
  * @brief	Custom game mode class.
@@ -23,6 +24,17 @@ public:
 	// Public methods
 
 	ASGameModeBase();
+
+	/**
+	 * Initialize the game.
+	 * The GameMode's InitGame() event is called before any other functions (including PreInitializeComponents() )
+	 * and is used by the GameMode to initialize parameters and spawn its helper classes.
+	 * @warning: this is called before actors' PreInitializeComponents.
+	 */
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+
+	/** Signals that a player is ready to enter the game, which may start it up */
+	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) override;
 	
 	virtual void StartPlay() override;
 	
@@ -30,6 +42,11 @@ public:
 
 	UFUNCTION(Exec)
 	void KillAll();
+
+	UFUNCTION(BlueprintCallable, Category="SaveGame")
+	void WriteSaveGame();
+
+	void LoadSaveGame();
 
 protected:
 
@@ -62,6 +79,11 @@ protected:
 	FTimerHandle TimerHandle_SpawnBots;
 
 	FTimerHandle TimerHandle_SpawnPowerUps;
+
+	FString SlotName;
+	
+	UPROPERTY()
+	USSaveGame* CurrentSaveGame;
 	
 	// Protected methods
 
