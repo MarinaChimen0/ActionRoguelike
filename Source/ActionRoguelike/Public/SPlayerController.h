@@ -14,6 +14,8 @@ class ACTIONROGUELIKE_API ASPlayerController : public APlayerController
 
 protected:
 	
+// Protected delegates
+	
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPawnChanged, APawn*, NewPawn);
 	UPROPERTY(BlueprintAssignable)
 	FOnPawnChanged OnPawnChanged;
@@ -23,6 +25,21 @@ protected:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerStateChanged, APlayerState*, NewPlayerState);
 	UPROPERTY(BlueprintAssignable)
 	FOnPlayerStateChanged OnPlayerStateReceived;
+
+// Protected variables
+
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	TSubclassOf<UUserWidget> PauseMenuClass;
+	
+	UPROPERTY()
+	UUserWidget* PauseMenuInstance;
+
+// Protected methods
+
+	UFUNCTION(BlueprintCallable)
+	void TogglePauseMenu();
+
+	virtual void SetupInputComponent() override;
 
 	virtual void SetPawn(APawn* InPawn) override;
 
