@@ -29,6 +29,11 @@ void ASPowerUpBaseActor::Interact_Implementation(APawn* InstigatorPawn)
 		Deactivate();
 }
 
+FText ASPowerUpBaseActor::GetInteractText_Implementation(APawn* InstigatorPawn)
+{
+	return FText::GetEmpty();
+}
+
 // Called when the game starts or when spawned
 void ASPowerUpBaseActor::BeginPlay()
 {

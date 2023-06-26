@@ -18,6 +18,8 @@ public:
 
 	ASHealthPotionPowerUp();
 	
+	virtual FText GetInteractText_Implementation(APawn* InstigatorPawn) override;
+	
 protected:
 
 	// Protected variables
