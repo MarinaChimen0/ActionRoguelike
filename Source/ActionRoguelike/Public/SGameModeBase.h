@@ -1,15 +1,40 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/DataTable.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 #include "GameFramework/GameModeBase.h"
 #include "SGameModeBase.generated.h"
 
+class USMonsterData;
+class UDataTable;
 class UEnvQuery;
 class UEnvQueryInstanceBlueprintWrapper;
 class UCurveFloat;
 class ASPowerUpBaseActor;
 class USSaveGame;
+
+USTRUCT(BlueprintType)
+struct FMonsterInfoRow : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FPrimaryAssetId MonsterId;
+	//TSubclassOf<AActor> MonsterClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float Weight = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float SpawnCost = 5.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float KillReward = 20.0f;
+	
+};
 
 /**
  * @brief	Custom game mode class.
@@ -53,8 +78,11 @@ protected:
 	// Protected variables
 
 	UPROPERTY(EditDefaultsOnly, Category="AI")
-	TSubclassOf<AActor> MinionClass;
+	UDataTable* MonsterTable;
 
+	// UPROPERTY(EditDefaultsOnly, Category="AI")
+	// TSubclassOf<AActor> MinionClass;
+	
 	UPROPERTY(EditDefaultsOnly, Category="AI")
 	UEnvQuery* SpawnBotQuery;
 
@@ -93,6 +121,8 @@ protected:
 	UFUNCTION()
 	void OnMinionSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
 
+	void OnMonsterLoaded(FPrimaryAssetId LoadedId, FVector SpawnLocation);
+	
 	UFUNCTION()
 	void OnPowerUpSpawnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
 	
