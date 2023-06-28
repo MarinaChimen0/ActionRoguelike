@@ -17,6 +17,10 @@ class ACTIONROGUELIKE_API ASMagicProjectile : public ASProjectileBaseActor
 {
 	GENERATED_BODY()
 
+public:
+
+	ASMagicProjectile();
+
 protected:
 
 // Protected variables

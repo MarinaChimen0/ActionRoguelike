@@ -7,6 +7,11 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
+ASMagicProjectile::ASMagicProjectile()
+{
+	InitialLifeSpan = 10.0f;
+}
+
 void ASMagicProjectile::BeginPlay()
 {
 	Super::BeginPlay();

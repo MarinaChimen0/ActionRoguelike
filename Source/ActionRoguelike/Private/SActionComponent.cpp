@@ -4,6 +4,8 @@
 #include "Engine/ActorChannel.h"
 #include "Net/UnrealNetwork.h"
 
+DECLARE_CYCLE_STAT(TEXT("StartAction"), STAT_StartAction, STATGROUP_STANFORD);
+
 USActionComponent::USActionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -38,6 +40,18 @@ void USActionComponent::BeginPlay()
 			AddAction(GetOwner(), ActionClass);
 		}
 	}
+}
+
+void USActionComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	TArray<USAction*> ActionsCopy = Actions;
+	for (USAction* Action : Actions)
+	{
+		if(Action && Action->IsRunning())
+			Action->StopAction(GetOwner());
+	}
+	
+	Super::EndPlay(EndPlayReason);
 }
 
 void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -103,6 +117,8 @@ void USActionComponent::RemoveAction(USAction* Action)
 
 bool USActionComponent::StartAction(AActor* Instigator, FName ActionName)
 {
+	SCOPE_CYCLE_COUNTER(STAT_StartAction);
+	
 	for(USAction* Action: Actions)
 	{
 		if(Action && Action->ActionName == ActionName)
@@ -115,8 +131,12 @@ bool USActionComponent::StartAction(AActor* Instigator, FName ActionName)
 			}
 			
 			if(!GetOwner()->HasAuthority())
+			{
 				ServerStartAction(Instigator, ActionName);
-					
+			}
+
+			TRACE_BOOKMARK(TEXT("StartAction::%s"), *GetNameSafe(Action));
+			
 			Action->StartAction(Instigator);
 			return true;
 		}
