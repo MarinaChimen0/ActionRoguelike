@@ -45,7 +45,7 @@ void USActionComponent::BeginPlay()
 void USActionComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	TArray<USAction*> ActionsCopy = Actions;
-	for (USAction* Action : Actions)
+	for (USAction* Action : ActionsCopy)
 	{
 		if(Action && Action->IsRunning())
 			Action->StopAction(GetOwner());
