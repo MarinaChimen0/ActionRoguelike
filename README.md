@@ -1,4 +1,5 @@
 # Professional Game Development in C++ and Unreal Engine Course
+![UnrealEngineCourse](https://github.com/user-attachments/assets/d63d09a9-f388-4084-a21c-dde1dfbc5562)
 
 Project created following Professional Game Development in C++ and Unreal Engine course by Tom Looman (https://courses.tomlooman.com/p/unrealengine-cpp): "With a focus on hands-on learning, this course covers the essential concepts and techniques of programming in C++ within the Unreal Engine environment. You will learn about Unreal Engine's class hierarchy and core features, as well as best practices for debugging, optimization, and gameplay systems. By the end of the course, you will have the knowledge and skills to confidently create your own games using C++ and Unreal Engine. Major Features:
 - Building C++ Game Framework.
